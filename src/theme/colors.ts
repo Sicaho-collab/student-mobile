@@ -10,9 +10,11 @@
  *
  * Until then, keep these in sync with m3-design-system/src/tokens.ts
  */
-import { m3Colors, m3Radius } from '@sicaho-collab/m3-design-system'
+import { m3Colors, m3Radius, m3Typography } from '@sicaho-collab/m3-design-system'
 
 export const colors = m3Colors
+
+export const fontFamily = m3Typography.fontSans
 
 export const fontSize = {
   title: 20,
