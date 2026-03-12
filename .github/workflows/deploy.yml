@@ -19,21 +19,42 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: student-mobile
+
+      # Clone design system so file: dependencies resolve
+      - uses: actions/checkout@v4
+        with:
+          repository: Sicaho-collab/alumable-design-system
+          path: Components/alumable-design-system
+
+      # Build design-tokens and ui-mobile so dist/ exists
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: student-mobile/package-lock.json
           registry-url: https://npm.pkg.github.com
           scope: '@sicaho-collab'
-      - run: npm ci
+
+      - run: npm install && npm run build
+        working-directory: Components/alumable-design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PKG_TOKEN }}
+
+      - run: npm ci
+        working-directory: student-mobile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PKG_TOKEN }}
+
       - run: npx expo export --platform web
+        working-directory: student-mobile
         env:
           EXPO_PUBLIC_BASE_PATH: /student-mobile
+
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: student-mobile/dist
 
   deploy:
     needs: build
