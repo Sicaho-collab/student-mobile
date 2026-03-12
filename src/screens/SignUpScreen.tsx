@@ -418,7 +418,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surfaceContainerLowest,
     borderWidth: 1,
-    borderColor: colors.outlineVariant,
+    borderColor: `${colors.outlineVariant}99`,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
     borderRadius: borderRadius.md,
     padding: 20,
     gap: 16,

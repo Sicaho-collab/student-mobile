@@ -236,7 +236,12 @@ const styles = StyleSheet.create({
   skeletonCard: {
     borderRadius: borderRadius.md,
     borderWidth: 1,
-    borderColor: colors.outlineVariant,
+    borderColor: `${colors.outlineVariant}99`,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
     padding: 16,
   },
   skeletonLine: {
