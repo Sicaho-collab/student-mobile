@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@alumable/design-tokens": "file:../Components/alumable-design-system/packages/design-tokens",
+    "@alumable/ui-mobile": "file:../Components/alumable-design-system/packages/ui-mobile",
     "@expo/metro-runtime": "~55.0.6",
     "@expo/vector-icons": "^15.0.2",
     "@react-navigation/bottom-tabs": "^7.15.5",

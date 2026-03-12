@@ -1,8 +1,9 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
-import { colors } from '../theme/colors'
+import { NavigationBar } from '@alumable/ui-mobile'
+import { m3Colors } from '@alumable/design-tokens'
 import EarnScreen from '../screens/EarnScreen'
 import ApplicationsScreen from '../screens/ApplicationsScreen'
 import ProfileScreen from '../screens/ProfileScreen'
@@ -15,56 +16,49 @@ export type TabParamList = {
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
-export default function TabNavigator() {
+const tabConfig = [
+  {
+    label: 'Earn',
+    icon: <Ionicons name="briefcase-outline" size={24} color={m3Colors.onSurfaceVariant} />,
+    activeIcon: <Ionicons name="briefcase" size={24} color={m3Colors.onSurface} />,
+  },
+  {
+    label: 'Applications',
+    icon: <Ionicons name="document-text-outline" size={24} color={m3Colors.onSurfaceVariant} />,
+    activeIcon: <Ionicons name="document-text" size={24} color={m3Colors.onSurface} />,
+  },
+  {
+    label: 'Profile',
+    icon: <Ionicons name="person-outline" size={24} color={m3Colors.onSurfaceVariant} />,
+    activeIcon: <Ionicons name="person" size={24} color={m3Colors.onSurface} />,
+  },
+]
+
+function CustomTabBar({ state, navigation }: BottomTabBarProps) {
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.onSurfaceVariant,
-        tabBarStyle: styles.tabBar,
-        tabBarLabelStyle: styles.tabBarLabel,
+    <NavigationBar
+      items={tabConfig}
+      activeIndex={state.index}
+      onSelect={(index) => {
+        const route = state.routes[index]
+        const isFocused = state.index === index
+        if (!isFocused) {
+          navigation.navigate(route.name)
+        }
       }}
-    >
-      <Tab.Screen
-        name="Earn"
-        component={EarnScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="briefcase-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Applications"
-        component={ApplicationsScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    />
   )
 }
 
-const styles = StyleSheet.create({
-  tabBar: {
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.outlineVariant,
-  },
-  tabBarLabel: {
-    fontSize: 11,
-    fontWeight: '500',
-  },
-})
+export default function TabNavigator() {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => <CustomTabBar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name="Earn" component={EarnScreen} />
+      <Tab.Screen name="Applications" component={ApplicationsScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  )
+}
