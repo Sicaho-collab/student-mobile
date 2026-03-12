@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
@@ -16,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { colors, fontSize, borderRadius } from '../theme/colors'
+import { TextField } from '../components/TextField'
 import type { AuthStackParamList } from '../../App'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -173,22 +173,20 @@ export default function ForgotPasswordScreen() {
 
           {/* Form Card */}
           <View style={styles.card}>
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={[styles.input, emailError ? styles.inputError : null]}
-                value={email}
-                onChangeText={v => { setEmail(v); setServerError(null) }}
-                onBlur={() => setTouched(true)}
-                placeholder="you@example.com"
-                placeholderTextColor={colors.outline}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                editable={!isLoading}
-              />
-              {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-            </View>
+            <TextField
+              variant="outlined"
+              label="Email"
+              value={email}
+              onChangeText={v => { setEmail(v); setServerError(null) }}
+              onBlur={() => setTouched(true)}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              disabled={isLoading}
+              error={!!emailError}
+              errorText={emailError ?? undefined}
+            />
 
             <TouchableOpacity
               style={[styles.button, (!isValid || isLoading) && styles.buttonDisabled]}
@@ -315,27 +313,6 @@ const styles = StyleSheet.create({
   outlinedButtonTextDisabled: {
     color: colors.onSurfaceVariant,
   },
-  fieldGroup: {
-    gap: 6,
-  },
-  label: {
-    fontSize: fontSize.body,
-    fontWeight: '500',
-    color: colors.onSurface,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: borderRadius.sm,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: fontSize.body,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
   linkText: {
     fontSize: fontSize.body,
     color: colors.primary,
@@ -360,9 +337,5 @@ const styles = StyleSheet.create({
   backRow: {
     alignItems: 'center',
     marginTop: 24,
-  },
-  errorText: {
-    fontSize: fontSize.caption,
-    color: colors.error,
   },
 })

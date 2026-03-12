@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
@@ -16,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { colors, fontSize, borderRadius } from '../theme/colors'
+import { TextField } from '../components/TextField'
 import type { AuthStackParamList } from '../../App'
 
 // --- Validation helpers (matching employer-web/types.ts) ---
@@ -221,66 +221,62 @@ export default function SignUpScreen() {
           {/* Form Card */}
           <View style={styles.card}>
             {/* Full Name */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Full Name</Text>
-              <TextInput
-                style={[styles.input, fullNameError ? styles.inputError : null]}
-                value={data.fullName}
-                onChangeText={v => patch({ fullName: v })}
-                onBlur={() => handleBlur('fullName')}
-                placeholder="Your full name"
-                placeholderTextColor={colors.outline}
-                autoComplete="name"
-                editable={!isLoading}
-              />
-              {fullNameError && <Text style={styles.errorText}>{fullNameError}</Text>}
-            </View>
+            <TextField
+              variant="outlined"
+              label="Full Name"
+              value={data.fullName}
+              onChangeText={v => patch({ fullName: v })}
+              onBlur={() => handleBlur('fullName')}
+              placeholder="Your full name"
+              autoComplete="name"
+              disabled={isLoading}
+              error={!!fullNameError}
+              errorText={fullNameError ?? undefined}
+            />
 
             {/* Email */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={[styles.input, emailError ? styles.inputError : null]}
-                value={data.email}
-                onChangeText={v => patch({ email: v })}
-                onBlur={() => handleBlur('email')}
-                placeholder="you@example.com"
-                placeholderTextColor={colors.outline}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                editable={!isLoading}
-              />
-              {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-            </View>
+            <TextField
+              variant="outlined"
+              label="Email"
+              value={data.email}
+              onChangeText={v => patch({ email: v })}
+              onBlur={() => handleBlur('email')}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              disabled={isLoading}
+              error={!!emailError}
+              errorText={emailError ?? undefined}
+            />
 
             {/* Password + strength indicator */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Password</Text>
-              <View style={[styles.inputRow, passwordError ? styles.inputError : null]}>
-                <TextInput
-                  style={styles.inputFlex}
-                  value={data.password}
-                  onChangeText={v => patch({ password: v })}
-                  onBlur={() => handleBlur('password')}
-                  placeholder="Create a password"
-                  placeholderTextColor={colors.outline}
-                  secureTextEntry={!showPassword}
-                  autoComplete="password-new"
-                  editable={!isLoading}
-                />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(v => !v)}
-                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-                >
-                  <Ionicons
-                    name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-                    size={22}
-                    color={colors.onSurfaceVariant}
-                  />
-                </TouchableOpacity>
-              </View>
-              {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
+            <View style={{ gap: 6 }}>
+              <TextField
+                variant="outlined"
+                label="Password"
+                value={data.password}
+                onChangeText={v => patch({ password: v })}
+                onBlur={() => handleBlur('password')}
+                placeholder="Create a password"
+                secureTextEntry={!showPassword}
+                autoComplete="password-new"
+                disabled={isLoading}
+                error={!!passwordError}
+                errorText={passwordError ?? undefined}
+                trailingIcon={
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(v => !v)}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  >
+                    <Ionicons
+                      name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+                      size={22}
+                      color={colors.onSurfaceVariant}
+                    />
+                  </TouchableOpacity>
+                }
+              />
 
               {/* Strength indicator */}
               {strength && (
@@ -299,20 +295,19 @@ export default function SignUpScreen() {
             </View>
 
             {/* Confirm Password */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Confirm Password</Text>
-              <View style={[styles.inputRow, confirmPasswordError ? styles.inputError : null]}>
-                <TextInput
-                  style={styles.inputFlex}
-                  value={data.confirmPassword}
-                  onChangeText={v => patch({ confirmPassword: v })}
-                  onBlur={() => handleBlur('confirmPassword')}
-                  placeholder="Re-enter password"
-                  placeholderTextColor={colors.outline}
-                  secureTextEntry={!showConfirmPassword}
-                  autoComplete="password-new"
-                  editable={!isLoading}
-                />
+            <TextField
+              variant="outlined"
+              label="Confirm Password"
+              value={data.confirmPassword}
+              onChangeText={v => patch({ confirmPassword: v })}
+              onBlur={() => handleBlur('confirmPassword')}
+              placeholder="Re-enter password"
+              secureTextEntry={!showConfirmPassword}
+              autoComplete="password-new"
+              disabled={isLoading}
+              error={!!confirmPasswordError}
+              errorText={confirmPasswordError ?? undefined}
+              trailingIcon={
                 <TouchableOpacity
                   onPress={() => setShowConfirmPassword(v => !v)}
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -323,9 +318,8 @@ export default function SignUpScreen() {
                     color={colors.onSurfaceVariant}
                   />
                 </TouchableOpacity>
-              </View>
-              {confirmPasswordError && <Text style={styles.errorText}>{confirmPasswordError}</Text>}
-            </View>
+              }
+            />
 
             {/* Terms checkbox */}
             <TouchableOpacity
@@ -455,42 +449,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
   },
-  fieldGroup: {
-    gap: 6,
-  },
-  label: {
-    fontSize: fontSize.body,
-    fontWeight: '500',
-    color: colors.onSurface,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: borderRadius.sm,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: fontSize.body,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: borderRadius.sm,
-    paddingHorizontal: 14,
-    backgroundColor: colors.surface,
-  },
-  inputFlex: {
-    flex: 1,
-    paddingVertical: 12,
-    fontSize: fontSize.body,
-    color: colors.onSurface,
-  },
   strengthRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -564,9 +522,5 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: fontSize.body,
     color: colors.onSurfaceVariant,
-  },
-  errorText: {
-    fontSize: fontSize.caption,
-    color: colors.error,
   },
 })

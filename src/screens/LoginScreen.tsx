@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
@@ -16,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { colors, fontSize, borderRadius } from '../theme/colors'
+import { TextField } from '../components/TextField'
 import { useAuth } from '../context/AuthContext'
 import type { AuthStackParamList } from '../../App'
 
@@ -104,38 +104,35 @@ export default function LoginScreen() {
           {/* Form Card */}
           <View style={styles.card}>
             {/* Email */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                style={[styles.input, emailError ? styles.inputError : null]}
-                value={email}
-                onChangeText={v => { setEmail(v); setServerError(null) }}
-                onBlur={() => handleBlur('email')}
-                placeholder="you@example.com"
-                placeholderTextColor={colors.outline}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                editable={!isLoading}
-              />
-              {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-            </View>
+            <TextField
+              variant="outlined"
+              label="Email"
+              value={email}
+              onChangeText={v => { setEmail(v); setServerError(null) }}
+              onBlur={() => handleBlur('email')}
+              placeholder="you@example.com"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              disabled={isLoading}
+              error={!!emailError}
+              errorText={emailError ?? undefined}
+            />
 
             {/* Password */}
-            <View style={styles.fieldGroup}>
-              <Text style={styles.label}>Password</Text>
-              <View style={[styles.inputRow, passwordError ? styles.inputError : null]}>
-                <TextInput
-                  style={styles.inputFlex}
-                  value={password}
-                  onChangeText={v => { setPassword(v); setServerError(null) }}
-                  onBlur={() => handleBlur('password')}
-                  placeholder="Enter password"
-                  placeholderTextColor={colors.outline}
-                  secureTextEntry={!showPassword}
-                  autoComplete="password"
-                  editable={!isLoading}
-                />
+            <TextField
+              variant="outlined"
+              label="Password"
+              value={password}
+              onChangeText={v => { setPassword(v); setServerError(null) }}
+              onBlur={() => handleBlur('password')}
+              placeholder="Enter password"
+              secureTextEntry={!showPassword}
+              autoComplete="password"
+              disabled={isLoading}
+              error={!!passwordError}
+              errorText={passwordError ?? undefined}
+              trailingIcon={
                 <TouchableOpacity
                   onPress={() => setShowPassword(v => !v)}
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -146,9 +143,8 @@ export default function LoginScreen() {
                     color={colors.onSurfaceVariant}
                   />
                 </TouchableOpacity>
-              </View>
-              {passwordError && <Text style={styles.errorText}>{passwordError}</Text>}
-            </View>
+              }
+            />
 
             {/* Forgot Password */}
             <TouchableOpacity
@@ -242,42 +238,6 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 16,
   },
-  fieldGroup: {
-    gap: 6,
-  },
-  label: {
-    fontSize: fontSize.body,
-    fontWeight: '500',
-    color: colors.onSurface,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: borderRadius.sm,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: fontSize.body,
-    color: colors.onSurface,
-    backgroundColor: colors.surface,
-  },
-  inputError: {
-    borderColor: colors.error,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: borderRadius.sm,
-    paddingHorizontal: 14,
-    backgroundColor: colors.surface,
-  },
-  inputFlex: {
-    flex: 1,
-    paddingVertical: 12,
-    fontSize: fontSize.body,
-    color: colors.onSurface,
-  },
   forgotRow: {
     alignSelf: 'flex-end',
   },
@@ -310,9 +270,5 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: fontSize.body,
     color: colors.onSurfaceVariant,
-  },
-  errorText: {
-    fontSize: fontSize.caption,
-    color: colors.error,
   },
 })
