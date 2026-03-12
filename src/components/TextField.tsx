@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 56,
+    minHeight: 40,
   },
   containerFilled: {
     backgroundColor: colors.surfaceContainerHighest,
-    borderTopLeftRadius: m3Radius.xs,
-    borderTopRightRadius: m3Radius.xs,
+    borderTopLeftRadius: m3Radius.sm,
+    borderTopRightRadius: m3Radius.sm,
     borderBottomWidth: 1,
     borderBottomColor: colors.onSurfaceVariant,
   },
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderWidth: 1,
     borderColor: colors.outline,
-    borderRadius: m3Radius.xs,
+    borderRadius: m3Radius.sm,
   },
   containerDisabled: {
     opacity: 0.38,
@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: colors.onSurface,
-    paddingHorizontal: m3Spacing[4],
-    minHeight: 56,
+    paddingHorizontal: m3Spacing[3],
+    minHeight: 40,
     outlineStyle: 'none',
   } as any,
   inputMultiline: {
